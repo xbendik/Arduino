@@ -1,11 +1,14 @@
-/*  
+ /*  
     Arduino with PIR motion sensor
 */
  
-int led = 13;                // the pin that the LED is atteched to
-int sensor = 2;              // the pin that the sensor is atteched to
-int activation = 0;                 // variable to store the sensor status (value)
-int piezoPin = 8;            //pin for make sound on Piezo
+int led = 13;                   // the pin where the LED is attached to
+int sensor = 3;                 // the pin where the sensor is attached to
+int activation = 0;             // variable to store the sensor status (value)
+int piezoPin = 8;               //the pin where the Piezo buzzer is attached to
+int noiseTime = 3000;           //time in ms for how log it will make the buzzer alarm
+int noiseFreq = 3000;           //frequency for Piezo buzzer alarm
+//int delayTime = noiseTime + 2;  
 
 void setup() {
   pinMode(led, OUTPUT);      // initalize LED as an output
@@ -18,10 +21,14 @@ void loop(){
   if (activation == HIGH) {           // check if the sensor is HIGH
     Serial.println("Motion detected!"); 
     digitalWrite(led, HIGH);    // turn LED ON
-    tone(piezoPin, 3000, 2000);  //make some noise
-    delay(2010);                // delay milliseconds 
-
-    //turn off the LED on the end
-    digitalWrite(led, LOW);    // turn LED ON
+    tone(piezoPin, noiseFreq, noiseTime);  //make some noise
+    
+    delay(noiseTime);                // delay milliseconds 
+    Serial.println("Reseting... Done!"); 
+    digitalWrite(led, LOW);    // turn LED OFF
+  }
+  else{
+    delay(1000);
+    Serial.println("Motion NOT detected!"); 
   } 
 }
